@@ -3,9 +3,12 @@ import { Ticket } from "@/typings";
 import Link from "next/link";
 
 async function getTickets() {
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
+
   const res = await fetch("http://localhost:4000/tickets", {
     next: {
-      revalidate: 60,
+      // revalidate: 60,
+      revalidate: 0, // page is always dynamically rendered
     },
   });
   return res.json();

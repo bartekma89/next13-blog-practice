@@ -7,6 +7,7 @@ export default function Navbar() {
       <h1>Blog</h1>
       <Link href={Routes.DASHBOARD}>Dashboard</Link>
       <Link href={Routes.TICKETS}>Tickets</Link>
+      <Link href={`${Routes.TICKETS}${Routes.CREATE}`}>Create Ticket</Link>
     </nav>
   );
 }
