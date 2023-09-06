@@ -9,8 +9,19 @@ interface Props {
   };
 }
 
+export async function generateMetadata({ params }: Props) {
+  const id = params.id;
+
+  const res = await fetch(`http://localhost:3000/api/tickets/${id}`);
+  const ticket: Ticket = await res.json();
+
+  return {
+    title: `Blog | ${ticket.title}`,
+  };
+}
+
 export async function generateStaticParams() {
-  const res = await fetch("http://localhost:4000/tickets");
+  const res = await fetch("http://localhost:3000/api/tickets");
 
   const tickets: Ticket[] = await res.json();
 
@@ -20,7 +31,7 @@ export async function generateStaticParams() {
 async function getTicket(id: string) {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-  const res = await fetch(`http://localhost:4000/tickets/${id}`, {
+  const res = await fetch(`http://localhost:3000/api/tickets/${id}`, {
     next: {
       revalidate: 60,
     },

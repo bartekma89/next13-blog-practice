@@ -29,27 +29,6 @@
       "id": "Lz7hdAA"
     },
     {
-      "title": "test 2",
-      "body": "hello!",
-      "priority": "high",
-      "user_email": "mario@netninja.dev",
-      "id": "2xuC0U4"
-    },
-    {
-      "title": "test 3",
-      "body": "lksndgsd",
-      "priority": "high",
-      "user_email": "mario@netninja.dev",
-      "id": "4hJqpVD"
-    },
-    {
-      "title": "new ticket",
-      "body": "new body ticket",
-      "priority": "medium",
-      "user_email": "bartol@bartol.com",
-      "id": "CxbkLUV"
-    },
-    {
       "title": "dupa",
       "body": "dupa",
       "priority": "low",
@@ -62,6 +41,19 @@
       "priority": "high",
       "user_email": "bartol@bartol.com",
       "id": "fv0ryTK"
+    },
+    {
+      "title": "postman api",
+      "body": "dupa blada",
+      "user_email": "test@test.com",
+      "id": "FMdTs9A"
+    },
+    {
+      "title": "postman api",
+      "body": "dupa blada",
+      "priority": "low",
+      "user_email": "test@test.com",
+      "id": "eTHcMmf"
     }
   ]
 }
