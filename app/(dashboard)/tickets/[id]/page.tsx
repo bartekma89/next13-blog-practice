@@ -3,7 +3,7 @@
 import { notFound } from "next/navigation";
 import { Ticket } from "@/typings";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from 'next/headers'
+import { cookies } from "next/headers";
 import DeleteButton from "./DeleteButton";
 
 interface Props {
@@ -13,23 +13,27 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props) {
-
-
   const supabase = createServerComponentClient({ cookies });
 
-  const { data: ticket } = await supabase.from('tickets').select().eq('id', params.id).single();
+  const { data: ticket } = await supabase
+    .from("tickets")
+    .select()
+    .eq("id", params.id)
+    .single();
 
   return {
-    title: `Blog | ${ticket?.title || 'Ticket not found'}`,
+    title: `Blog | ${ticket?.title || "Ticket not found"}`,
   };
 }
 
 async function getTicket(id: string) {
-
   const supabase = createServerComponentClient({ cookies });
 
-  const { data } = await supabase.from('tickets').select().eq('id', id).single();
-
+  const { data } = await supabase
+    .from("tickets")
+    .select()
+    .eq("id", id)
+    .single();
 
   if (!data) {
     notFound();
@@ -51,7 +55,9 @@ export default async function TicketDetails({ params }: Props) {
         <h2>Ticket Details</h2>
         {
           <div className="ml-auto">
-            {data.session?.user.email === ticket.user_email && <DeleteButton id={params.id} />}
+            {data.session?.user.email === ticket.user_email && (
+              <DeleteButton id={params.id} />
+            )}
           </div>
         }
       </nav>

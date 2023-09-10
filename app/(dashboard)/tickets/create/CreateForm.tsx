@@ -1,87 +1,26 @@
-"use client";
-
-import { useState } from "react";
-import { redirect, useRouter } from "next/navigation";
-
-type PriorityType = "low" | "medium" | "high";
+import SubmitButton from "@/components/SubmitButton";
+import { addTicket } from "@/app/_actions";
 
 export default function CreateForm() {
-  const router = useRouter();
-
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [priority, setPriority] = useState<PriorityType>("low");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    const formData = new FormData(e.currentTarget);
-
-    const ticket = {
-      title: formData.get("title"),
-      body: formData.get("body"),
-      priority: formData.get("priority"),
-    };
-
-    const res = await fetch("http://localhost:3000/api/tickets", {
-      method: "POST",
-      body: JSON.stringify(ticket),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const addedTicket = await res.json();
-    setIsLoading(false);
-
-    if (addedTicket.error) {
-      console.warn(addedTicket.message);
-    }
-
-    if (addedTicket.data) {
-      router.refresh();
-      router.push("/tickets");
-    }
-  };
-
   return (
-    <form className="w-1/2" onSubmit={handleSubmit}>
+    <form className="w-1/2" action={addTicket}>
       <label>
         <span>Title:</span>
-        <input
-          name="title"
-          type="text"
-          value={title}
-          required
-          onChange={(e) => setTitle(e.target.value)}
-        />
+        <input name="title" type="text" required />
       </label>
       <label>
         <span>Body:</span>
-        <textarea
-          name="body"
-          value={body}
-          required
-          onChange={(e) => setBody(e.target.value)}
-        />
+        <textarea name="body" required />
       </label>
       <label>
         <span>Priority:</span>
-        <select
-          name="priority"
-          value={priority}
-          onChange={(e) => setPriority(e.target.value as PriorityType)}
-        >
+        <select name="priority">
           <option value="low">Low Priority</option>
           <option value="medium">Medium Priority</option>
           <option value="high">High Priority</option>
         </select>
       </label>
-      <button type="submit" className="btn-primary" disabled={isLoading}>
-        {isLoading ? <span>Adding...</span> : <span>Add Ticket</span>}
-      </button>
+      <SubmitButton />
     </form>
   );
 }
