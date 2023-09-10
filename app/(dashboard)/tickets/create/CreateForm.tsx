@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { redirect, useRouter } from "next/navigation";
-import { Ticket } from "@/typings";
 
 type PriorityType = "low" | "medium" | "high";
 
@@ -24,8 +23,7 @@ export default function CreateForm() {
       title: formData.get("title"),
       body: formData.get("body"),
       priority: formData.get("priority"),
-      user_email: "bartol@bartol.com",
-    } as Ticket;
+    };
 
     const res = await fetch("http://localhost:3000/api/tickets", {
       method: "POST",
@@ -35,7 +33,14 @@ export default function CreateForm() {
       },
     });
 
-    if (res.status === 201) {
+    const addedTicket = await res.json();
+    setIsLoading(false);
+
+    if (addedTicket.error) {
+      console.warn(addedTicket.message);
+    }
+
+    if (addedTicket.data) {
       router.refresh();
       router.push("/tickets");
     }

@@ -3,6 +3,8 @@ import { Rubik } from "next/font/google";
 
 import "./globals.css";
 
+export const dynamic = "force-dynamic";
+
 const rubik = Rubik({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

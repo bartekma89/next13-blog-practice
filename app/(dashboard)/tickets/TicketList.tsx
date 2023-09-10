@@ -1,17 +1,19 @@
 import { Routes } from "@/config/routes";
 import { Ticket } from "@/typings";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
+import { cookies } from 'next/headers'
 
-async function getTickets() {
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
+async function getTickets(): Promise<Ticket[]> {
+  const supabase = createServerComponentClient<Ticket[]>({ cookies });
 
-  const res = await fetch("http://localhost:3000/api/tickets", {
-    next: {
-      // revalidate: 60,
-      revalidate: 0, // page is always dynamically rendered
-    },
-  });
-  return res.json();
+  const { data, error } = await supabase.from('tickets').select();
+
+  if (error) {
+    console.warn(error)
+  }
+
+  return data as unknown as Ticket[];
 }
 
 export default async function TicketList() {

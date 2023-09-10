@@ -15,10 +15,12 @@ export default function Navbar({ user }: ComponentProps) {
       </Link>
       <Link href={Routes.DASHBOARD}>Dashboard</Link>
       <Link href={Routes.TICKETS}>Tickets</Link>
-      <Link href={`${Routes.TICKETS}${Routes.CREATE}`}>Create Ticket</Link>
+      <Link href={`${Routes.TICKETS}${Routes.CREATE}`} className="mr-auto">
+        Create Ticket
+      </Link>
 
-      {user && <LogoutButton />}
       {user && <span>Hello, {user.email}</span>}
+      {user && <LogoutButton />}
     </nav>
   );
 }

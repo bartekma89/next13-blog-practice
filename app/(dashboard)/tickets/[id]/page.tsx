@@ -1,7 +1,10 @@
-export const dynamicParams = true; // Dynamic segments not included in generateStaticParams are generated on demand.
+// export const dynamicParams = true; // Dynamic segments not included in generateStaticParams are generated on demand.
 
 import { notFound } from "next/navigation";
 import { Ticket } from "@/typings";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from 'next/headers'
+import DeleteButton from "./DeleteButton";
 
 interface Props {
   params: {
@@ -10,47 +13,47 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const id = params.id;
 
-  const res = await fetch(`http://localhost:3000/api/tickets/${id}`);
-  const ticket: Ticket = await res.json();
+
+  const supabase = createServerComponentClient({ cookies });
+
+  const { data: ticket } = await supabase.from('tickets').select().eq('id', params.id).single();
 
   return {
-    title: `Blog | ${ticket.title}`,
+    title: `Blog | ${ticket?.title || 'Ticket not found'}`,
   };
 }
 
-export async function generateStaticParams() {
-  const res = await fetch("http://localhost:3000/api/tickets");
-
-  const tickets: Ticket[] = await res.json();
-
-  return tickets.map((ticket) => ({ id: ticket.id }));
-}
-
 async function getTicket(id: string) {
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-  const res = await fetch(`http://localhost:3000/api/tickets/${id}`, {
-    next: {
-      revalidate: 60,
-    },
-  });
+  const supabase = createServerComponentClient({ cookies });
 
-  if (!res.ok) {
+  const { data } = await supabase.from('tickets').select().eq('id', id).single();
+
+
+  if (!data) {
     notFound();
   }
 
-  return res.json();
+  return data;
 }
 
 export default async function TicketDetails({ params }: Props) {
   const ticket: Ticket = await getTicket(params.id);
 
+  const supabase = createServerComponentClient({ cookies });
+
+  const { data } = await supabase.auth.getSession();
+
   return (
     <main>
       <nav>
         <h2>Ticket Details</h2>
+        {
+          <div className="ml-auto">
+            {data.session?.user.email === ticket.user_email && <DeleteButton id={params.id} />}
+          </div>
+        }
       </nav>
       <div className="card">
         <h3>{ticket.title}</h3>
