@@ -1,8 +1,6 @@
 "use client";
 import { deleteTicket } from "@/app/_actions";
-import { Routes } from "@/config/routes";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { TiDelete } from "react-icons/ti";
 
 interface ComponentProps {
